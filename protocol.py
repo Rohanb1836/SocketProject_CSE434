@@ -111,7 +111,7 @@ def reply(request, ok, **payload):
 
 def summary(msg):
     """Choose the fields to print in a message log."""
-    keys = ('command', 'request_id', 'code', 'peer_name', 'id', 'owner', 'pos', 'seq', 'reason')
+    keys = ('command', 'request_id', 'code', 'peer_name', 'id', 'owner', 'pos', 'seq', 'reason', 'event_id', 'id_seq')
     return {k: msg[k] for k in keys if k in msg}
 
 
@@ -178,6 +178,9 @@ class HashTable:
     def __init__(self, size):
         self.slots = [[] for _ in range(size)]
         self.count = 0
+
+    def find(self, pos, event_id):
+        return next((row for row in self.slots[pos] if int(row[0]) == event_id), None)
 
     def store(self, pos, record):
         bucket = self.slots[pos]
